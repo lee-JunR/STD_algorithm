@@ -1,0 +1,60 @@
+package week8;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class boj1012 {
+    public static void main(String[] args) throws IOException {
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        for(int i=0;i<N;i++){
+            String[] line = br.readLine().split(" ");
+            int n = Integer.parseInt(line[0]);
+            int m = Integer.parseInt(line[1]);
+            int c = Integer.parseInt(line[2]);
+
+            int[][] map = new int[n][m];
+            for(int j = 0; j<c; j++){
+               line = br.readLine().split(" ");
+               int x = Integer.parseInt(line[0]);
+               int y = Integer.parseInt(line[1]);
+               map[x][y] = 1;
+            }
+            Deque<int[]> deque = new ArrayDeque<>();
+            int answer = 0;
+            for(int j = 0; j < n; j++){
+                for(int k = 0; k < m; k++){
+                    if(map[j][k]==0 || map[j][k] == 2){
+                        continue;
+                    }
+                    deque.addLast(new int[]{j, k});
+                    while(!deque.isEmpty()){
+                        int[] now =  deque.pollFirst();
+                        int nowX = now[0];
+                        int nowY = now[1];
+                        if(map[nowX][nowY] == 2){
+                            continue;
+                        }
+                        map[nowX][nowY] = 2;
+                        for(int l =0; l<4; l++){
+                            try{
+                                if(map[nowX+dx[l]][nowY+dy[l]] == 1){
+                                    deque.addLast(new int[]{nowX+dx[l], nowY+dy[l]});
+                                }
+                            }catch(Exception e){
+                                continue;
+                            }
+                        }
+                    }
+                    answer += 1;
+                }
+            }
+            System.out.println(answer);
+        }
+    }
+}
